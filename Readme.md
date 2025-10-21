@@ -64,6 +64,4 @@ Instead of pixel manipulation, operations are performed in the **frequency domai
 4. **Histograms and contrast enhancement**
 5. **Spatial and frequency domain filters**  
 
-…we can build strong foundations for advanced applications in **computer vision, AI, and multimedia systems**.
-
----
+we can build strong foundations for advanced applications in **computer vision, AI, and multimedia systems**.
