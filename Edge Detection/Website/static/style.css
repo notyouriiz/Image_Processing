@@ -1,0 +1,109 @@
+body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: linear-gradient(135deg, #10141f, #1c2331);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    color: #f1f3f9;
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  button, .btn {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f1f3f9;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: all 0.2s ease-in-out;
+  }
+  
+  button:hover, .btn:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+  
+  /* ✅ Dropdown (Layer Selector) — white background, black text */
+  select {
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  select:hover {
+    background: #f2f2f2;
+  }
+  
+  
+  button:hover, .btn:hover, select:hover {
+    background: rgba(255, 255, 255, 0.18);
+  }
+  
+  .video-card {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  }
+  
+  .video-card img {
+    width: 100%;
+    display: block;
+    border-radius: 16px;
+  }
+  
+  h2 {
+    margin-top: 30px;
+    color: #b0b7c3;
+  }
+  
+  table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  th {
+    background: rgba(255,255,255,0.08);
+  }
+  
+  tr:hover {
+    background: rgba(255,255,255,0.1);
+  }
+  
