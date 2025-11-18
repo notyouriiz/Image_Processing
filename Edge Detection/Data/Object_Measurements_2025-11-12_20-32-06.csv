@@ -1,0 +1,4 @@
+Timestamp,Frame Index,Object Index,Marker Status,cm/pixel,Width (cm),Height (cm),Volume (cm^3),Margin of Error (%)
+2025-11-12 20:32:06,1,1,Marker OK (ID 0),0.036393,8.079,15.03,1230.635,8.483
+2025-11-12 20:32:07,30,1,Marker OK (ID 0),0.036685,8.878,15.334,1187.732,8.509
+2025-11-12 20:32:08,63,1,Marker OK (ID 0),0.037198,8.853,15.363,1213.536,8.536

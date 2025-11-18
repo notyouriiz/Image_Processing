@@ -1,0 +1,8 @@
+Timestamp,Frame Index,Object Index,Marker Status,cm/pixel,Width (cm),Height (cm),Volume (cm^3),Margin of Error (%)
+2025-11-13 19:56:44,2,1,Marker lost - using last/fallback scale,0.05,25.1,0.65,2.167,6.124
+2025-11-13 19:56:45,25,1,Marker lost - using last/fallback scale,0.05,24.7,0.65,2.098,6.012
+2025-11-13 19:56:46,48,1,Marker lost - using last/fallback scale,0.05,24.95,0.6,2.238,6.116
+2025-11-13 19:56:47,70,1,Marker lost - using last/fallback scale,0.05,25.1,0.7,2.217,6.09
+2025-11-13 19:56:48,91,7,Marker lost - using last/fallback scale,0.05,0.85,18.15,115.842,12.639
+2025-11-13 19:56:49,113,1,Marker lost - using last/fallback scale,0.05,24.95,0.65,2.291,6.082
+2025-11-13 19:56:50,134,5,Marker lost - using last/fallback scale,0.05,38.5,15.8,519.19,12.736

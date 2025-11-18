@@ -1,109 +1,176 @@
+/* 
+   GLOBAL STYLE
+ */
 body {
-    margin: 0;
-    font-family: "Inter", sans-serif;
-    background: linear-gradient(135deg, #10141f, #1c2331);
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-  }
-  
-  .container {
-    width: 90%;
-    max-width: 1200px;
-    margin-top: 30px;
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: linear-gradient(135deg, #10141f, #1c2331);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.container {
+  width: 90%;
+  max-width: 1250px;
+  margin-top: 30px;
+}
+
+/* 
+   HEADER — OPTION B (Title left, controls right)
+ */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: #f1f3f9;
+}
+
+/* Controls right side (wraps automatically) */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px 12px;
+  max-width: 70%;
+}
+
+/* 
+   FORM ELEMENTS & BUTTONS
+ */
+button, .btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f1f3f9;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover, .btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Dropdown (white background, black text) */
+select {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+select:hover {
+  background: #f2f2f2;
+}
+
+/* Intensity Range */
+#pseudoIntensity {
+  width: 120px;
+}
+
+/* 
+   VIDEO CARD
+ */
+.video-card {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.video-card img {
+  width: 100%;
+  display: block;
+  border-radius: 16px;
+}
+
+/* 
+   HISTOGRAM & VIDEO LAYOUT
+ */
+.video-and-hist {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.video-and-hist img {
+  max-width: 100%;
+  display: block;
+}
+
+/* 
+   TABLE (Live CSV)
+ */
+h2 {
+  margin-top: 30px;
+  color: #b0b7c3;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.05);
+}
+
+th, td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+th {
+  background: rgba(255,255,255,0.08);
+}
+
+tr:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* 
+   RESPONSIVE
+ */
+@media (max-width: 1000px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
     text-align: center;
   }
-  
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    letter-spacing: 0.5px;
-    color: #f1f3f9;
-  }
-  
   .controls {
-    display: flex;
     justify-content: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    max-width: 100%;
+    margin-top: 12px;
   }
-  
-  button, .btn {
-    background: rgba(255, 255, 255, 0.08);
-    color: #f1f3f9;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    backdrop-filter: blur(6px);
-    transition: all 0.2s ease-in-out;
+}
+
+@media (max-width: 900px) {
+  .video-and-hist {
+    flex-direction: column;
   }
-  
-  button:hover, .btn:hover {
-    background: rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 600px) {
+  .controls {
+    gap: 8px;
   }
-  
-  /* ✅ Dropdown (Layer Selector) — white background, black text */
-  select {
-    background: #ffffff;
-    color: #000000;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  select:hover {
-    background: #f2f2f2;
-  }
-  
-  
-  button:hover, .btn:hover, select:hover {
-    background: rgba(255, 255, 255, 0.18);
-  }
-  
-  .video-card {
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  }
-  
-  .video-card img {
-    width: 100%;
-    display: block;
-    border-radius: 16px;
-  }
-  
-  h2 {
-    margin-top: 30px;
-    color: #b0b7c3;
-  }
-  
-  table {
-    width: 100%;
-    margin-top: 10px;
-    border-collapse: collapse;
-    border-radius: 10px;
-    overflow: hidden;
-    background: rgba(255,255,255,0.05);
-  }
-  
-  th, td {
-    padding: 10px;
-    text-align: center;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-  }
-  
-  th {
-    background: rgba(255,255,255,0.08);
-  }
-  
-  tr:hover {
-    background: rgba(255,255,255,0.1);
-  }
-  
+}
