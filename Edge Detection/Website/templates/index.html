@@ -1,67 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>{{ title }}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-  <div class="container">
-    <h1>{{ title }}</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ title }}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>{{ title }}</h1>
+        <div class="controls">
+          <button id="toggleBtn">⏸ Pause</button>
+          <button id="fullscreenBtn">⛶ Fullscreen</button>
+          <a href="/download" class="btn">⬇ Download CSV</a>
 
-    <div class="controls">
-      <button id="toggleBtn">⏸ Pause</button>
-      <button id="fullscreenBtn">⛶ Fullscreen</button>
-      <a href="/download" class="btn">⬇ Download CSV</a>
+          <!-- Layer Selection -->
+          <select id="layerSelect">
+            <option value="original">Original</option>
+            <option value="gray">Gray</option>
+            <option value="blur">Blur</option>
+            <option value="sobel">Sobel</option>
+            <option value="mask">Mask</option>
+            <option value="overlay">Overlay</option>
 
-      <select id="layerSelect">
-        <option value="original">Original</option>
-        <option value="gray">Gray</option>
-        <option value="blur">Blur</option>
-        <option value="sobel">Sobel</option>
-        <option value="mask">Mask</option>
-        <option value="overlay">Overlay</option>
-      </select>
+            <!-- PSEUDO MODES A–H -->
+            <option value="pseudo_turbo">Pseudo – Turbo</option>
+            <option value="pseudo_inferno">Pseudo – Inferno</option>
+            <option value="pseudo_magma">Pseudo – Magma</option>
+            <option value="pseudo_hot">Pseudo – Hot</option>
+            <option value="pseudo_jet">Pseudo – Jet</option>
+            <option value="pseudo_rainbow">Pseudo – Rainbow</option>
+            <option value="pseudo_bone">Pseudo – Bone</option>
+            <option value="pseudo_ocean">Pseudo – Ocean</option>
+          </select>
 
-      <!-- Mode controls -->
-      <div style="display:flex; gap:8px; align-items:center;">
-        <button class="btn" id="modeCamera">Camera</button>
-        <button class="btn" id="modeImage">Image</button>
+          <!-- Pseudo intensity control -->
+          <label style="margin-left: 6px">Pseudo Intensity</label>
+          <input
+            type="range"
+            id="pseudoIntensity"
+            min="0.1"
+            max="3.0"
+            value="1.0"
+            step="0.1"
+          />
+          <span id="piVal">1.0</span>
+
+          <button class="btn" id="modeCamera">Camera</button>
+          <button class="btn" id="modeImage">Image</button>
+
+          <!-- Upload -->
+          <form id="uploadForm" style="display: inline-block">
+            <input
+              type="file"
+              id="fileInput"
+              name="files"
+              multiple
+              accept="image/*"
+            />
+            <button type="submit" class="btn">Upload</button>
+          </form>
+
+          <button class="btn" id="prevImage">◀ Prev</button>
+          <button class="btn" id="nextImage">Next ▶</button>
+        </div>
       </div>
 
-      <!-- Upload -->
-      <form id="uploadForm" style="display:inline-block;">
-        <input type="file" id="fileInput" name="files" multiple accept="image/*">
-        <button type="submit" class="btn">Upload</button>
-      </form>
+      <div
+        class="video-and-hist"
+        style="display: flex; gap: 16px; align-items: flex-start"
+      >
+        <div class="video-card" id="videoContainer" style="flex: 1">
+          <img
+            id="videoFeed"
+            src="{{ url_for('video_feed') }}"
+            alt="Live Feed"
+          />
+        </div>
 
-      <button class="btn" id="prevImage">◀ Prev</button>
-      <button class="btn" id="nextImage">Next ▶</button>
+        <div style="width: 340px">
+          <h3 style="margin: 6px 0 8px 0; color: #dfe6ef">
+            Histogram (selected layer)
+          </h3>
+          <img
+            id="histogram"
+            src="/histogram?layer=original&intensity=1.0"
+            style="
+              width: 100%;
+              border-radius: 8px;
+              border: 1px solid rgba(255, 255, 255, 0.06);
+            "
+          />
+          <div
+            id="histMeta"
+            style="margin-top: 8px; font-size: 13px; color: #b9c2cf"
+          >
+            Updated: <span id="histTime">-</span>
+          </div>
+        </div>
+      </div>
+
+      <h2>📊 Live Measurement Data</h2>
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Width (cm)</th>
+            <th>Height (cm)</th>
+            <th>Volume (cm³)</th>
+            <th>Error (%)</th>
+            <th>Marker</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
 
-    <div class="video-and-hist" style="display:flex; gap:16px; align-items:flex-start;">
-      <div class="video-card" id="videoContainer" style="flex:1;">
-        <img id="videoFeed" src="{{ url_for('video_feed') }}" alt="Live Feed">
-      </div>
-
-      <div style="width:340px;">
-        <h3 style="margin:6px 0 8px 0; color:#dfe6ef;">Histogram (selected layer)</h3>
-        <img id="histogram" src="/histogram.jpg" style="width:100%; border-radius:8px; border:1px solid rgba(255,255,255,0.06);">
-        <div id="histMeta" style="margin-top:8px; font-size:13px; color:#b9c2cf;">Updated: <span id="histTime">-</span></div>
-      </div>
-    </div>
-
-    <h2>📊 Live Measurement Data</h2>
-    <table id="dataTable">
-      <thead>
-        <tr>
-          <th>ID</th><th>Width (cm)</th><th>Height (cm)</th><th>Volume (cm³)</th><th>Error (%)</th><th>Marker</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-
-  <script src="{{ url_for('static', filename='scripts.js') }}"></script>
-</body>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+  </body>
 </html>

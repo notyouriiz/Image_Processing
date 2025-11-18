@@ -1,6 +1,9 @@
 const toggleBtn = document.getElementById("toggleBtn"); 
 const fullscreenBtn = document.getElementById("fullscreenBtn");
 const layerSelect = document.getElementById("layerSelect");
+const pseudoIntensity = document.getElementById("pseudoIntensity");
+const piVal = document.getElementById("piVal");
+
 const tableBody = document.querySelector("#dataTable tbody");
 const videoFeed = document.getElementById("videoFeed");
 const histogram = document.getElementById("histogram");
@@ -13,8 +16,9 @@ const fileInput = document.getElementById("fileInput");
 const nextImageBtn = document.getElementById("nextImage");
 const prevImageBtn = document.getElementById("prevImage");
 
-let currentMode = "camera"; // frontend state
+let currentMode = "camera";
 
+// Pause / Continue
 toggleBtn.addEventListener("click", () => {
   fetch("/toggle", { method: "POST" })
     .then(r => r.json())
@@ -23,6 +27,7 @@ toggleBtn.addEventListener("click", () => {
     });
 });
 
+// Fullscreen
 fullscreenBtn.addEventListener("click", () => {
   const video = document.getElementById("videoFeed");
   if (video.requestFullscreen) video.requestFullscreen();
@@ -30,17 +35,28 @@ fullscreenBtn.addEventListener("click", () => {
   else if (video.msRequestFullscreen) video.msRequestFullscreen();
 });
 
+// Layer change sends to server
 layerSelect.addEventListener("change", () => {
   fetch("/set_layer", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ layer: layerSelect.value })
+    body: JSON.stringify({ layer: layerSelect.value, intensity: pseudoIntensity.value })
   });
 });
 
+// Pseudo intensity change
+pseudoIntensity.addEventListener("input", () => {
+  piVal.textContent = pseudoIntensity.value;
+  fetch("/set_layer", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ layer: layerSelect.value, intensity: pseudoIntensity.value })
+  });
+});
+
+// Mode switch
 modeCameraBtn.addEventListener("click", () => setMode("camera"));
 modeImageBtn.addEventListener("click", () => setMode("image"));
-
 
 function setMode(m) {
   fetch("/set_mode", {
@@ -50,10 +66,9 @@ function setMode(m) {
   }).then(r => r.json()).then(resp => {
     currentMode = resp.mode;
     if (currentMode === "camera") {
-      videoFeed.src = "/video_feed";
+      videoFeed.src = `/video_feed?layer=${layerSelect.value}&intensity=${pseudoIntensity.value}`;
     } else {
-      // for image modes, poll /image_feed
-      videoFeed.src = "/image_feed?ts=" + Date.now();
+      videoFeed.src = `/image_feed?layer=${layerSelect.value}&intensity=${pseudoIntensity.value}&ts=${Date.now()}`;
     }
   });
 }
@@ -79,12 +94,12 @@ uploadForm.addEventListener("submit", (e) => {
 // next / prev buttons
 nextImageBtn.addEventListener("click", () => {
   fetch("/next_image").then(r => r.json()).then(j => {
-    videoFeed.src = "/image_feed?ts=" + Date.now();
+    videoFeed.src = `/image_feed?layer=${layerSelect.value}&intensity=${pseudoIntensity.value}&ts=${Date.now()}`;
   });
 });
 prevImageBtn.addEventListener("click", () => {
   fetch("/prev_image").then(r => r.json()).then(j => {
-    videoFeed.src = "/image_feed?ts=" + Date.now();
+    videoFeed.src = `/image_feed?layer=${layerSelect.value}&intensity=${pseudoIntensity.value}&ts=${Date.now()}`;
   });
 });
 
@@ -108,16 +123,18 @@ setInterval(() => {
     });
 }, 1000);
 
-// For camera mode, video_feed is a multipart MJPEG so img src works.
-// For image mode, we poll the image endpoint periodically to refresh
+// Feed & histogram refresh
 setInterval(() => {
+  const layer = layerSelect.value;
+  const intensity = pseudoIntensity.value;
+
   if (currentMode !== "camera") {
-    videoFeed.src = "/image_feed?ts=" + Date.now();
+    videoFeed.src = `/image_feed?layer=${layer}&intensity=${intensity}&ts=${Date.now()}`;
   }
-  // refresh histogram
-  histogram.src = "/histogram.jpg?ts=" + Date.now();
+
+  histogram.src = `/histogram?layer=${layer}&intensity=${intensity}&ts=${Date.now()}`;
   histTime.textContent = new Date().toLocaleTimeString();
-}, 900);
+}, 350);
 
 // initial mode
-videoFeed.src = "/video_feed";
+videoFeed.src = `/video_feed?layer=${layerSelect.value}&intensity=${pseudoIntensity.value}`;
