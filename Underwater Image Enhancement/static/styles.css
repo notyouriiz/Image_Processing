@@ -1,0 +1,295 @@
+:root {
+  --bg: #0f0f10;
+  --card: #161616;
+  --muted: #9aa3b2;
+  --accent: #4c9aff;
+  --radius: 12px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: #eee;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+  padding: 28px;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+header h1 {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 20px 0 40px 0;
+  color: #f4f4f4;
+  letter-spacing: 0.5px;
+}
+
+.uploader {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 30px auto;
+}
+
+/* Upload Box */
+.upload-box {
+  background: #1d1d1d;
+  padding: 20px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* File box */
+.file-box {
+  flex: 1;
+  min-width: 260px;
+}
+
+.file-label {
+  display: block;
+  width: 100%;
+  cursor: pointer;
+}
+
+.file-label input[type="file"] {
+  display: none;
+}
+
+.file-drop {
+  background: #2a2a2a;
+  padding: 20px;
+  border-radius: 12px;
+  border: 2px dashed #444;
+  text-align: center;
+  color: #bbb;
+  transition: 0.2s ease;
+}
+
+.file-drop:hover {
+  background: #333;
+  border-color: #666;
+}
+
+/* Upload button */
+.upload-btn {
+  background: #4b91ff;
+  border: none;
+  padding: 15px 22px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.upload-btn:hover {
+  background: #3b7be0;
+}
+
+/* Empty State Centering */
+.empty-state {
+  text-align: center;
+  color: #777;
+  margin-top: 25px;
+}
+.empty-state {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 10px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.01),
+      rgba(255, 255, 255, 0.005)
+    );
+    color: var(--muted);
+  }
+.file-label {
+  display: inline-block;
+  cursor: pointer;
+  flex: 1;
+}
+.file-label input[type="file"] {
+  display: none;
+}
+.file-drop {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
+  border: 1px dashed rgba(255, 255, 255, 0.06);
+  padding: 16px;
+  border-radius: 10px;
+  text-align: center;
+  color: var(--muted);
+}
+.file-drop strong {
+  display: block;
+  color: #fff;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.file-drop span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.file-label.dragover .file-drop {
+  border-color: rgba(76, 157, 255, 0.6);
+}
+
+/* Button */
+.btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.35s ease,
+    font-weight 0.35s ease,
+    filter 0.35s ease;
+}
+.btn:hover {
+    transform: scale(1.04);
+    font-weight: 700;
+}
+.btn.small {
+  padding: 6px 10px;
+  font-size: 13px;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.35s ease,
+    font-weight 0.35s ease,
+    filter 0.35s ease;
+}
+.btn.small:hover {
+    transform: scale(1.04);
+    font-weight: 700;
+}
+
+/* gallery */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 18px;
+}
+/* if there is only one image: make it span more and be bigger */
+.gallery .item:only-child {
+  grid-column: 1 / -1;
+  max-width: 900px;
+  justify-self: center;
+}
+.gallery .item:only-child .preview-wrap {
+  max-width: 950px !important;
+}
+.item {
+  background: var(--card);
+  padding: 14px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Title */
+.title {
+  margin: 0;
+  font-size: 14px;
+  color: #fff;
+  word-break: break-all;
+}
+
+/* preview */
+.preview-wrap {
+  width: 100%;
+  background: #000;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.preview {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* controls */
+.controls {
+  display: grid;
+  gap: 8px;
+}
+.controls label {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+}
+.slider {
+  width: 100%;
+}
+
+/* histogram canvas */
+.histogram {
+  background: #000;
+  border-radius: 6px;
+  width: 100%;
+  height: 150px;
+  display: block;
+  margin-top: 6px;
+}
+
+/* small controls row */
+.controls-row {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+/* Fullscreen viewer */
+.fullscreen-view {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: auto;
+}
+.fullscreen-view img {
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  display: block;
+}
+
+/* Close button */
+.fullscreen-close {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  font-size: 40px;
+  cursor: pointer;
+  color: white;
+  z-index: 10000;
+}

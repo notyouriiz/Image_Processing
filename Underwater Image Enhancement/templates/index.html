@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Image Enhancement{% endblock %}
+
+{% block content %}
+
+<section class="uploader">
+    <form id="uploadForm" method="POST" enctype="multipart/form-data" class="upload-box">
+
+        <div class="file-box">
+            <label class="file-label" for="fileInput">
+                <input id="fileInput" type="file" name="images" multiple required>
+                <div class="file-drop">
+                    <strong>Select Images</strong>
+                    <span>Click to choose or drag here</span>
+                </div>
+            </label>
+        </div>
+
+        <button type="submit" class="btn upload-btn" id="uploadBtn">
+            Upload (0 images)
+        </button>
+    </form>
+
+    <div id="emptyState" class="empty-state">
+        <p>No images uploaded.</p>
+        <small>Upload one or more images to begin.</small>
+    </div>
+</section>
+
+
+
+<section id="gallery" class="gallery">
+    {% for img in images %}
+    <article class="item" data-filename="{{ img }}">
+        <h3 class="title">{{ img }}</h3>
+
+        <div class="preview-wrap">
+            <img id="img-{{ img }}" class="preview" src="/static/uploads/{{ img }}" alt="{{ img }}">
+        </div>
+
+        <div class="controls">
+            {% set controls = [
+                ('clahe','CLAHE',5,0.1),
+                ('blur','Blur',25,1),
+                ('sharp','Sharpen',5,0.1),
+                ('denoise','Denoise',20,1)
+            ] %}
+
+            {% for id,label,max,step in controls %}
+            <label for="{{ id }}-{{ img }}">
+                {{ label }}:
+                <span id="val-{{ id }}-{{ img }}">0</span>
+            </label>
+
+            <input
+                id="{{ id }}-{{ img }}"
+                class="slider"
+                value="0"
+                type="range"
+                min="0"
+                max="{{ max }}"
+                step="{{ step }}"
+                data-type="{{ id }}"
+                data-file="{{ img }}">
+            {% endfor %}
+
+            <div class="controls-row">
+                <button class="btn small download-btn" data-file="{{ img }}">Download</button> <button class="btn small fullscreen-btn" data-file="{{ img }}">Fullscreen</button>
+            </div>
+        </div>
+
+        <canvas id="hist-{{ img }}" class="histogram" width="512" height="150"></canvas>
+    </article>
+    {% endfor %}
+</section>
+
+{% endblock %}
