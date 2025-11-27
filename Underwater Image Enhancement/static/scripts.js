@@ -85,7 +85,7 @@ function initPage() {
         }
     });
   
-  // Compare Image Before and After
+  // Compare Image Before and After - STILL BUG
     document.addEventListener("click", e => {
       if (!e.target.classList.contains("compare-btn")) return;
 
