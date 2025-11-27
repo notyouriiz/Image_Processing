@@ -38,38 +38,76 @@
             <img id="img-{{ img }}" class="preview" src="/static/uploads/{{ img }}" alt="{{ img }}">
         </div>
 
+        <div class="checkbox-row">
+            {% set advanced_checkbox_controls = [
+                ('segmentation','Segmentation'),
+                ('alignment','Align')
+            ] %}
+        
+            {% for id,label in advanced_checkbox_controls %}
+            <div class="checkbox-control">
+                <label>
+                    <input
+                        type="checkbox"
+                        id="{{ id }}-{{ img }}"
+                        data-type="{{ id }}"
+                        data-file="{{ img }}"
+                    >
+                    {{ label }}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+
         <div class="controls">
             {% set controls = [
                 ('clahe','CLAHE',5,0.1),
                 ('blur','Blur',25,1),
                 ('sharp','Sharpen',5,0.1),
-                ('denoise','Denoise',20,1)
+                ('denoise','Denoise',20,1),
+                ('frequency', 'Freq Mask',100,1)
             ] %}
-
+        
             {% for id,label,max,step in controls %}
             <label for="{{ id }}-{{ img }}">
                 {{ label }}:
                 <span id="val-{{ id }}-{{ img }}">0</span>
             </label>
-
-            <input
-                id="{{ id }}-{{ img }}"
-                class="slider"
-                value="0"
-                type="range"
-                min="0"
-                max="{{ max }}"
-                step="{{ step }}"
-                data-type="{{ id }}"
-                data-file="{{ img }}">
+        
+            <div class="slider-row">
+                <input
+                    id="{{ id }}-{{ img }}"
+                    class="slider"
+                    type="range"
+                    value="0"
+                    min="0"
+                    max="{{ max }}"
+                    step="{{ step }}"
+                    data-type="{{ id }}"
+                    data-file="{{ img }}"
+                >
+                <input
+                    type="number"
+                    class="slider-input"
+                    value="0"
+                    min="0"
+                    max="{{ max }}"
+                    step="{{ step }}"
+                    data-type="{{ id }}"
+                    data-file="{{ img }}"
+                >
+            </div>
             {% endfor %}
-
+        
             <div class="controls-row">
-                <button class="btn small download-btn" data-file="{{ img }}">Download</button> <button class="btn small fullscreen-btn" data-file="{{ img }}">Fullscreen</button>
+                <button class="btn small download-btn" data-file="{{ img }}">Download</button>
+                <button class="btn small fullscreen-btn" data-file="{{ img }}">Fullscreen</button>
+                <button class="btn small compare-btn" data-file="{{ img }}">Compare</button>
             </div>
         </div>
 
         <canvas id="hist-{{ img }}" class="histogram" width="512" height="150"></canvas>
+        <div id="compare-{{ img }}" class="compare-container"></div>
     </article>
     {% endfor %}
 </section>

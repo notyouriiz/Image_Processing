@@ -24,14 +24,33 @@ function initPage() {
   // attach slider listeners with debounce
   const timers = {};
   sliders.forEach((sl) => {
-    // initialize displayed value
     const filename = sl.dataset.file;
     const type = sl.dataset.type;
+  
+    const numberInput = document.querySelector(
+      `.slider-input[data-file="${filename}"][data-type="${type}"]`
+    );
+  
+    // Initialize displayed value
     document.getElementById(`val-${type}-${filename}`).textContent = sl.value;
-
-    sl.addEventListener("input", (e) => {
+    numberInput.value = sl.value;
+  
+    // Slider → Number input
+    sl.addEventListener("input", () => {
       document.getElementById(`val-${type}-${filename}`).textContent = sl.value;
-
+      numberInput.value = sl.value;
+      clearTimeout(timers[filename]);
+      timers[filename] = setTimeout(() => processImage(filename), 200);
+    });
+  
+    // Number input → Slider
+    numberInput.addEventListener("input", () => {
+      let val = parseFloat(numberInput.value);
+      if (isNaN(val)) val = 0;
+      if (val < parseFloat(sl.min)) val = sl.min;
+      if (val > parseFloat(sl.max)) val = sl.max;
+      sl.value = val;
+      document.getElementById(`val-${type}-${filename}`).textContent = val;
       clearTimeout(timers[filename]);
       timers[filename] = setTimeout(() => processImage(filename), 200);
     });
@@ -61,13 +80,52 @@ function initPage() {
             `;
             document.body.appendChild(div);
         }
-
         if (e.target.classList.contains("fullscreen-close")) {
             e.target.parentElement.remove();
         }
     });
-    
-  // On page load, process each displayed image with current slider (initially zero)
+  
+  // Compare Image Before and After
+    document.addEventListener("click", e => {
+      if (!e.target.classList.contains("compare-btn")) return;
+
+      const file = e.target.dataset.file;
+      const imgEl = document.getElementById("img-" + file);
+      if (!imgEl) return;
+
+      // Initialize original & enhanced
+      if (!imgEl.dataset.original) imgEl.dataset.original = `/static/uploads/${file}`;
+      if (!imgEl.dataset.enhanced) imgEl.dataset.enhanced = imgEl.src;
+      if (!imgEl.dataset.showingOriginal) imgEl.dataset.showingOriginal = "false";
+
+      // Toggle between original and current enhanced
+      if (imgEl.dataset.showingOriginal === "true") {
+          // Show latest enhanced
+          imgEl.src = imgEl.dataset.enhanced;
+          imgEl.dataset.showingOriginal = "false";
+      } else {
+          // Show original
+          imgEl.src = imgEl.dataset.original;
+          imgEl.dataset.showingOriginal = "true";
+      }
+    });
+
+    // Always call this after processing a new enhanced image
+    function updateEnhancedImage(filename, newSrc) {
+      const imgEl = document.getElementById("img-" + filename);
+      if (!imgEl) return;
+
+      // Store the latest enhanced image
+      imgEl.dataset.enhanced = newSrc;
+
+      // If currently showing enhanced, update visible image
+      if (imgEl.dataset.showingOriginal === "false") {
+          imgEl.src = newSrc;
+      }
+      // If showing original, do NOT change visible src
+      // When user clicks compare, it will now correctly go back to latest enhanced
+    }
+  
   files.forEach((name) => {
     // ensure the initial displayed values are visible and trigger a single process to populate histogram
     setTimeout(() => processImage(name), 50);
@@ -108,6 +166,9 @@ function processImage(filename) {
   data.append("blur", getVal(filename, "blur"));
   data.append("sharp", getVal(filename, "sharp"));
   data.append("denoise", getVal(filename, "denoise"));
+  data.append("segmentation", getVal(filename, "segmentation"));
+  data.append("alignment", getVal(filename, "alignment"));
+  data.append("frequency", getVal(filename, "frequency"));
 
   fetch("/process", { method: "POST", body: data })
     .then((r) => r.json())
@@ -128,9 +189,12 @@ function processImage(filename) {
 
 function getVal(file, type) {
   const node = document.querySelector(
-    `.slider[data-file="${file}"][data-type="${type}"]`
+    `.slider[data-file="${file}"][data-type="${type}"],
+    input[type="checkbox"][data-file="${file}"][data-type="${type}"]`
   );
-  return node ? node.value : 0;
+  if (!node) return 0;
+  if (node.type === "checkbox") return node.checked ? 1 : 0;
+  return node.value
 }
 
 function drawHistogramFlexible(filename, hist) {

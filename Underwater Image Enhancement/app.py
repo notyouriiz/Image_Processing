@@ -1,7 +1,13 @@
 from flask import Flask, render_template, request, jsonify
 from processing import (
-    apply_clahe, apply_blur, apply_sharpen,
-    apply_denoise, compute_histogram
+    apply_clahe, 
+    apply_blur, 
+    apply_sharpen, 
+    apply_denoise, 
+    compute_histogram, 
+    apply_alignment, 
+    apply_segmentation_overlay, 
+    apply_frequency_mask
 )
 import base64
 import cv2
@@ -46,6 +52,9 @@ def process():
     blur_val = float(request.form.get("blur"))
     sharp_val = float(request.form.get("sharp"))
     denoise_val = float(request.form.get("denoise"))
+    seg_val = float(request.form.get("segmentation", 0))
+    align_val = float(request.form.get("alignment", 0))
+    freq_val = float(request.form.get("frequency", 0))
 
     img = uploaded_images[filename].copy()
 
@@ -61,6 +70,15 @@ def process():
 
     if denoise_val > 0:
         img = apply_denoise(img, denoise_val)
+
+    if seg_val > 0:
+        img = apply_segmentation_overlay(img)
+
+    if align_val > 0:
+        img = apply_alignment(img)
+
+    if freq_val > 0:
+        img = apply_frequency_mask(img, mask_radius=int(freq_val))
 
     # Histogram
     hist = compute_histogram(img)

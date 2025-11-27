@@ -40,3 +40,46 @@ def compute_histogram(img):
         hist_data[c] = hist.tolist()
 
     return hist_data
+
+
+def apply_segmentation_overlay(img):
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    _, mask = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)
+
+    # Create a green overlay mask
+    color_mask = np.zeros_like(img)
+    color_mask[:, :, 1] = mask  # Green channel
+
+    overlayed = cv2.addWeighted(img, 0.7, color_mask, 0.3, 0)
+    return overlayed
+
+
+def apply_alignment(img):
+    h, w = img.shape[:2]
+
+    # Example perspective transform
+    src_pts = np.float32([[0, 0], [w-1, 0], [0, h-1], [w-1, h-1]])
+    dst_pts = np.float32([[10, 10], [w-20, 5], [5, h-15], [w-10, h-10]])
+    matrix = cv2.getPerspectiveTransform(src_pts, dst_pts)
+    aligned = cv2.warpPerspective(img, matrix, (w, h))
+    return aligned
+
+
+def apply_frequency_mask(img, mask_radius=30):
+    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    f = np.fft.fft2(img_gray)
+    fshift = np.fft.fftshift(f)
+
+    # Circular mask
+    rows, cols = img_gray.shape
+    crow, ccol = rows // 2, cols // 2
+    mask = np.ones((rows, cols), np.uint8)
+    cv2.circle(mask, (ccol, crow), mask_radius, 0, -1)
+
+    fshift_masked = fshift * mask
+    f_ishift = np.fft.ifftshift(fshift_masked)
+    img_back = np.fft.ifft2(f_ishift)
+    img_back = np.abs(img_back)
+
+    # Convert back to BGR
+    return cv2.cvtColor(img_back.astype(np.uint8), cv2.COLOR_GRAY2BGR)
